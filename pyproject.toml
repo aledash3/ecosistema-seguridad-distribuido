@@ -13,7 +13,6 @@ authors = [
     { name = "Emily Mabel Ortega Constante", email = "emybel2005@gmail.com" },
     { name = "Carlos José Pilatuña Roldan" }
 ]
-license = { text = "MIT" }
 dependencies = [
     "Pyro4>=4.82",
     "grpcio>=1.60.0",

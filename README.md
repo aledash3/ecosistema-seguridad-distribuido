@@ -8,7 +8,7 @@
 [![gRPC](https://img.shields.io/badge/gRPC-Protocol%20Buffers-00bfa5?style=for-the-badge&logo=grpc&logoColor=white)](https://grpc.io/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Reactive%20Dashboard-ff4b4b?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Pandas](https://img.shields.io/badge/Pandas-Optimized%20Analytics-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+![Licencia](https://img.shields.io/badge/Licencia-Acad%C3%A9mica%20y%20Educativa-blue?style=for-the-badge)
 
 ---
 
@@ -258,4 +258,9 @@ Quito, Ecuador
 
 ## 📜 Licencia
 
-Este proyecto está bajo la [Licencia MIT](LICENSE). Consulta el archivo `LICENSE` para más información.
+Este proyecto fue desarrollado con fines exclusivamente académicos y educativos en la **Universidad Politécnica Salesiana (UPS)**.
+
+Todos los derechos pertenecen a sus respectivos autores:
+* **David Alejandro Cruz Palacios**
+* **Emily Mabel Ortega Constante**
+* **Carlos José Pilatuña Roldan**
