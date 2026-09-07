@@ -1,420 +1,261 @@
 # 🛡️ Ecosistema Distribuido de Analítica para la Seguridad Nacional
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python)
-![Pyro4](https://img.shields.io/badge/Pyro4-Distributed%20Objects-orange?style=for-the-badge)
-![gRPC](https://img.shields.io/badge/gRPC-Protocol%20Buffers-00bfa5?style=for-the-badge&logo=grpc)
-![Streamlit](https://img.shields.io/badge/Streamlit-Reactive%20Dashboard-ff4b4b?style=for-the-badge&logo=streamlit)
-![Pandas](https://img.shields.io/badge/Pandas-Optimized%20Analytics-150458?style=for-the-badge&logo=pandas)
+**Arquitectura distribuida de 3 capas para el procesamiento, análisis estadístico y visualización reactiva de homicidios intencionales en Ecuador (2014-2025) utilizando Pyro4, gRPC y Streamlit.**
+
+[![CI](https://github.com/aledash3/ecosistema-seguridad-distribuido/actions/workflows/ci.yml/badge.svg)](https://github.com/aledash3/ecosistema-seguridad-distribuido/actions)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Pyro4](https://img.shields.io/badge/Pyro4-Distributed%20Objects-orange?style=for-the-badge)](https://pyro4.readthedocs.io/)
+[![gRPC](https://img.shields.io/badge/gRPC-Protocol%20Buffers-00bfa5?style=for-the-badge&logo=grpc&logoColor=white)](https://grpc.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Reactive%20Dashboard-ff4b4b?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Pandas](https://img.shields.io/badge/Pandas-Optimized%20Analytics-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 ---
 
 ## 📌 Descripción General
 
-**Ecosistema Distribuido de Analítica para la Seguridad Nacional** es una arquitectura distribuida de tres capas diseñada para procesar, filtrar y visualizar grandes volúmenes de datos estadísticos oficiales sobre homicidios intencionales en Ecuador entre los años **2014 y 2025**.
+El **Ecosistema Distribuido de Analítica para la Seguridad Nacional** es una solución de computación distribuida orientada a servicios (SOA) diseñada para procesar, filtrar y explorar grandes volúmenes de datos estadísticos oficiales sobre homicidios intencionales en Ecuador entre **2014 y 2025**.
 
-El proyecto implementa principios avanzados de:
+El proyecto implementa principios clave de ingeniería de software backend y sistemas distribuidos:
 
-- Sistemas distribuidos orientados a servicios
-- Procesamiento desacoplado por microservicios
-- Serialización eficiente mediante Protocol Buffers
-- Tolerancia a fallos de red
-- Optimización extrema de memoria RAM con Pandas
-- Comunicación híbrida utilizando **Pyro4 + gRPC**
-- Dashboards reactivos con Streamlit
-
-El ecosistema está diseñado bajo una filosofía de **alto rendimiento**, **aislamiento de procesos** y **delegación eficiente de responsabilidades** entre capas.
+* **Arquitectura de 3 Capas Desacopladas**: Separación estricta entre capa de persistencia en memoria, capa lógica/matemática intermedia y capa de presentación visual.
+* **Comunicación Híbrida Especializada**:
+  * **Pyro4 (Python Remote Objects)**: Invocación remota de métodos de alta velocidad para la capa interna de datos.
+  * **gRPC + Protocol Buffers**: Transporte tipado, binario y de baja latencia entre el middleware lógico y el cliente visual con búfer ampliado a 50 MB.
+* **Optimización Extrema de Memoria RAM**: Uso de tipos categóricos (`category`) en Pandas, selección de columnas críticas en la carga y tipado de enteros de bajo consumo (`int16`).
+* **Resiliencia y Tolerancia a Fallos**: Verificación proactiva de canales, reconexión automática y degradación elegante ante la caída de nodos.
+* **Visualización Reactiva**: Dashboard interactivo con métricas KPI, gráficos dinámicos de barras y exploración en tiempo real mediante **Streamlit**.
 
 ---
 
-# 🏛️ Arquitectura Distribuida de 3 Capas
-
-El sistema está compuesto por tres nodos altamente desacoplados que interactúan mediante protocolos de red especializados.
-
----
-
-## 1️⃣ Capa de Datos — Nodo Maestro (Pyro4)
-
-📁 `nodo_maestro_pyro/`
-
-La capa de datos funciona como un **motor de persistencia en memoria RAM**.
-
-Es el único componente autorizado para interactuar directamente con el archivo físico `.xlsx` o `.csv`.
-
-### 🔧 Responsabilidades
-
-- Cargar datasets masivos usando Pandas
-- Reducir el consumo de RAM
-- Exponer datos procesados mediante Pyro4
-- Mantener el aislamiento del almacenamiento
-
-### ⚡ Optimización Extrema de Memoria
-
-El nodo maestro implementa varias estrategias avanzadas:
-
-- Extracción únicamente de columnas críticas:
-  - `fecha_infraccion`
-  - `tipo_muerte`
-  - `provincia`
-  - `arma`
-
-- Conversión de cadenas repetitivas a tipos:
-  ```python
-  category
-  ```
-
-- Eliminación de fechas completas tras extraer únicamente el año
-
-Estas técnicas permiten reducir drásticamente el uso de memoria incluso trabajando con datasets masivos.
-
-### 🌐 Comunicación
-
-El nodo se publica dinámicamente utilizando:
-
-```bash
-python -m Pyro4.naming
-```
-
-Esto evita exponer direcciones IP de forma insegura y permite descubrimiento automático de servicios.
-
----
-
-## 2️⃣ Capa Lógica — Nodo Intermedio (gRPC)
-
-📁 `nodo_logico_grpc/`
-
-Esta capa actúa simultáneamente como:
-
-- Cliente Pyro4
-- Servidor gRPC
-
-Es el núcleo matemático y lógico del ecosistema.
-
-### 🔧 Responsabilidades
-
-- Ejecutar lógica de negocio
-- Realizar agregaciones estadísticas
-- Ejecutar:
-  ```python
-  value_counts()
-  ```
-- Transformar tablas a JSON
-- Serializar datos mediante Protocol Buffers
-
-### 🧠 Motor Matemático
-
-Toda la carga computacional pesada se ejecuta aquí para evitar saturar el dashboard visual.
-
-### 🛡️ Tolerancia a Fallos
-
-El nodo verifica activamente:
-
-- Estado del Nodo Maestro
-- Disponibilidad del canal Pyro4
-- Errores de conectividad
-- Excepciones remotas
-
-Las excepciones son propagadas de forma controlada y segura.
-
-### 🚀 Canal de Red Ampliado
-
-El servidor gRPC utiliza un canal configurado hasta:
+## 🏛️ Arquitectura del Sistema
 
 ```text
-50 MB
-```
-
-Esto permite transmitir grandes tablas serializadas sin fragmentación ni bloqueos.
-
----
-
-## 3️⃣ Capa de Presentación — Dashboard Streamlit
-
-📁 `dashboard_streamlit/`
-
-Es la interfaz visual del ecosistema y funciona como cliente gRPC.
-
-### 🔧 Responsabilidades
-
-- Renderizar dashboards reactivos
-- Mostrar métricas y KPIs
-- Filtrar información temporalmente
-- Visualizar gráficos dinámicos
-
-### 📊 Funcionalidades
-
-- KPIs:
-  - Homicidios
-  - Asesinatos
-  - Sicariatos
-  - Femicidios
-
-- DataFrame completo en tiempo real
-- Gráficos de barras dinámicos
-- Sidebar con filtros avanzados
-
-### ⚡ Manejo Inteligente en RAM
-
-El dashboard utiliza:
-
-```python
-io.StringIO
-```
-
-para deserializar JSON masivos completamente en memoria, evitando errores relacionados con rutas físicas de archivos.
-
-### 🛡️ Manejo Seguro de Excepciones
-
-La interfaz captura errores como:
-
-```python
-grpc.RpcError
-```
-
-y muestra alertas amigables sin provocar el colapso de la aplicación.
-
----
-
-# 🔄 Flujo de Comunicación del Ecosistema
-
-```text
-┌──────────────────────┐
-│   Dashboard Streamlit│
-│   (Cliente gRPC)     │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│ Nodo Lógico gRPC     │
-│ (Servidor + Cliente) │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│ Nodo Maestro Pyro4   │
-│ (Motor en RAM)       │
-└──────────────────────┘
+┌────────────────────────────────────────────────────────┐
+│     Capa 3: Presentación Visual (Streamlit)            │
+│     - Dashboard interactivo y KPIs                     │
+│     - Filtros temporales y gráficos reactivos          │
+│     - Cliente gRPC optimizado con @st.cache_resource   │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼  gRPC (Protocol Buffers - Port 50051)
+┌────────────────────────────────────────────────────────┐
+│     Capa 2: Motor Lógico y Middleware (gRPC)           │
+│     - Servidor gRPC (MotorAnaliticaServicer)           │
+│     - Agregaciones estadísticas y ordenamiento         │
+│     - Cliente Pyro4 con reconexión automática          │
+│     - Serialización eficiente a JSON en memoria        │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼  Pyro4 RPC (Name Server Lookup)
+┌────────────────────────────────────────────────────────┐
+│     Capa 1: Persistencia y Optimización RAM (Pyro4)    │
+│     - Servidor Maestro (MaestroSeguridad)              │
+│     - Reducción del uso de RAM (tipos category)        │
+│     - Filtrado matricial de años                       │
+│     - Soporte para dataset oficial o muestra sintética │
+└────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-# 📁 Estructura del Proyecto
+## 🗂️ Estructura del Proyecto
 
 ```text
 ecosistema-seguridad-distribuido/
-│
-├── data/                                      # Ignorado en .gitignore
-│   └── mdi_homicidiosintencionales_pm_2014_2025.xlsx
-│
-├── proto/
-│   └── archivo.proto                          # Contrato fuente de verdad (gRPC)
-│
-├── nodo_maestro_pyro/
-│   └── servidor_maestro.py                    # Capa 1: Persistencia y optimización RAM
-│
-├── nodo_logico_grpc/
-│   ├── archivo_pb2.py                         # Generado por protoc
-│   ├── archivo_pb2_grpc.py                    # Generado por protoc
-│   └── servidor_grpc.py                       # Capa 2: Motor lógico y matemático
-│
+├── .github/
+│   └── workflows/
+│       └── ci.yml                 # Pipeline de Integración Continua (Python 3.10, 3.11, 3.12)
+├── data/
+│   ├── sample_dataset.csv         # Dataset de muestra integrado (1200 registros listos para usar)
+│   └── mdi_homicidiosintencionales_pm_2014_2025.xlsx  # Dataset oficial de producción (ignorado en Git)
 ├── dashboard_streamlit/
-│   ├── archivo_pb2.py                         # Generado por protoc
-│   ├── archivo_pb2_grpc.py                    # Generado por protoc
-│   └── app.py                                 # Capa 3: Dashboard interactivo
-│
+│   ├── app.py                     # Capa 3: Interfaz visual en Streamlit
+│   ├── archivo_pb2.py             # Stubs generados por protoc
+│   └── archivo_pb2_grpc.py        # Stubs generados por protoc
+├── nodo_logico_grpc/
+│   ├── servidor_grpc.py           # Capa 2: Servidor gRPC y cliente Pyro4
+│   ├── archivo_pb2.py
+│   └── archivo_pb2_grpc.py
+├── nodo_maestro_pyro/
+│   └── servidor_maestro.py        # Capa 1: Persistencia optimizada en RAM con Pyro4
+├── proto/
+│   ├── archivo.proto              # Contrato gRPC fuente de verdad
+│   ├── archivo_pb2.py
+│   └── archivo_pb2_grpc.py
+├── scripts/
+│   ├── compile_proto.py           # Script para compilar y sincronizar stubs protobuf
+│   └── generate_sample_data.py    # Generador de datos sintéticos de prueba
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py                # Fixtures y mocks de prueba
+│   ├── test_ecosistema.py         # Prueba de tolerancia a caídas de gRPC
+│   ├── test_grpc_servicer.py      # Pruebas unitarias de endpoints gRPC
+│   ├── test_maestro.py            # Pruebas de carga, filtrado y tipos en el nodo maestro
+│   └── test_proto.py              # Validación de serialización de mensajes protobuf
 ├── .gitignore
-└── README.md
+├── LICENSE                        # Licencia MIT
+├── pyproject.toml                 # Metadatos del proyecto y configuración de herramientas
+├── README.md                      # Documentación principal del sistema
+└── requirements.txt               # Dependencias de producción y desarrollo
 ```
 
 ---
 
-# ⚙️ Requisitos e Instalación
+## ⚙️ Requisitos e Instalación
 
-## 📥 Clonar el Repositorio
-
+### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/TU_USUARIO/ecosistema-seguridad-distribuido.git
-
+git clone https://github.com/aledash3/ecosistema-seguridad-distribuido.git
 cd ecosistema-seguridad-distribuido
 ```
 
----
-
-## 📦 Instalar Dependencias
-
+### 2. Crear Entorno Virtual e Instalar Dependencias
 ```bash
-pip install Pyro4 grpcio grpcio-tools pandas openpyxl streamlit
+# Crear entorno virtual
+python -m venv venv
+
+# Activar entorno virtual
+# En Windows:
+.\venv\Scripts\activate
+# En Linux / macOS:
+source venv/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
 ```
+
+### 3. Dataset de Datos
+* **Modo Demo Inmediato**: El repositorio incluye `data/sample_dataset.csv` con 1,200 registros realistas basados en provincias y modalidades de Ecuador. El sistema lo detecta y utiliza de inmediato sin descargas adicionales.
+* **Modo Producción**: Si dispones del archivo oficial de la Policía Nacional / Ministerio del Interior (`mdi_homicidiosintencionales_pm_2014_2025.xlsx`), colócalo dentro de la carpeta `data/`. El nodo maestro lo procesará y optimizará automáticamente en su primer arranque.
 
 ---
 
-## 📂 Preparar Dataset
+## 🚀 Guía de Ejecución
 
-Crear la carpeta:
+Debido a su naturaleza distribuida, la arquitectura requiere **4 terminales independientes** ejecutadas en orden secuencial:
 
-```text
-data/
-```
-
-y colocar el archivo original:
-
-```text
-mdi_homicidiosintencionales_pm_2014_2025.xlsx
-```
-
----
-
-# 🚀 Guía de Ejecución
-
-> ⚠️ IMPORTANTE:
-> Debido a la naturaleza distribuida del ecosistema, el sistema requiere **4 terminales independientes** ejecutándose simultáneamente y en orden estricto.
-
----
-
-## 🖥️ Terminal 1 — Name Server Pyro4
-
-Inicia el registro de servicios distribuidos.
-
+### 🖥️ Terminal 1 — Name Server de Pyro4
+Inicia el registro dinámico de nombres para localización de servicios:
 ```bash
 python -m Pyro4.naming
 ```
 
----
-
-## 🖥️ Terminal 2 — Nodo Maestro Pyro4
-
-Levanta el motor de persistencia y optimización RAM.
-
+### 🖥️ Terminal 2 — Nodo Maestro Pyro4 (Capa 1)
+Inicia el motor de datos y optimización de memoria:
 ```bash
-cd nodo_maestro_pyro
-
-python servidor_maestro.py
+python nodo_maestro_pyro/servidor_maestro.py
 ```
+> Mensaje esperado: `[LISTO] Nodo Maestro registrado en Name Server como 'maestro.seguridad'.`
 
----
-
-## 🖥️ Terminal 3 — Nodo Lógico gRPC
-
-Inicia el puente matemático intermedio.
-
+### 🖥️ Terminal 3 — Nodo Lógico gRPC (Capa 2)
+Inicia el middleware computacional intermedio:
 ```bash
-cd nodo_logico_grpc
-
-python servidor_grpc.py
+python nodo_logico_grpc/servidor_grpc.py
 ```
+> Mensaje esperado: `[LISTO] Nodo Lógico gRPC ejecutándose en [::]:50051 (Canal Ampliado 50MB)...`
 
----
-
-## 🖥️ Terminal 4 — Dashboard Streamlit
-
-Levanta la interfaz visual interactiva.
-
+### 🖥️ Terminal 4 — Dashboard Streamlit (Capa 3)
+Inicia la interfaz gráfica reactiva en el navegador:
 ```bash
-cd dashboard_streamlit
+streamlit run dashboard_streamlit/app.py
+```
+> Abrirá automáticamente en tu navegador `http://localhost:8501`.
 
-streamlit run app.py
+---
+
+## 🧩 Contrato gRPC (`proto/archivo.proto`)
+
+El contrato de comunicación define 4 procedimientos remotos tipados:
+
+```protobuf
+syntax = "proto3";
+
+package analitica_seguridad;
+
+service MotorAnalitica {
+  rpc ObtenerFrecuenciaProvincia (FiltroAnios) returns (RespuestaFrecuencias) {}
+  rpc ObtenerFrecuenciaArma (FiltroAnios) returns (RespuestaFrecuencias) {}
+  rpc ObtenerAgregacionInicial (FiltroAnios) returns (RespuestaFrecuencias) {}
+  rpc ObtenerResumenTabla (FiltroAnios) returns (RespuestaTabla) {}
+}
+
+message FiltroAnios {
+  int32 anio_inicio = 1;
+  int32 anio_fin = 2;
+}
+
+message ItemFrecuencia {
+  string categoria = 1;
+  int32 cantidad = 2;
+}
+
+message RespuestaFrecuencias {
+  repeated ItemFrecuencia datos = 1;
+}
+
+message RespuestaTabla {
+  string json_dataframe = 1;
+  int32 total_registros = 2;
+}
+```
+
+Para recompilar y sincronizar automáticamente los stubs en todas las capas:
+```bash
+python scripts/compile_proto.py
 ```
 
 ---
 
-# 🧩 Contrato de Comunicación — Protocol Buffers
+## 🛡️ Técnicas de Optimización y Resiliencia
 
-El sistema utiliza:
+| Área | Técnica Implementada | Impacto |
+| :--- | :--- | :--- |
+| **Memoria RAM** | Conversión a tipo `category` en Pandas | Reducción de hasta el **85% de consumo de RAM** en columnas repetitivas |
+| **Memoria RAM** | Tipado entero reducido (`int16`) para el año | Ahorro de espacio respecto a tipos `int64` |
+| **Red** | Búfer gRPC de 50 MB (`grpc.max_send_message_length`) | Capacidad de transferir datasets grandes sin fragmentación de sockets |
+| **Rendimiento UI** | `@st.cache_resource` en el stub gRPC | Elimina la sobrecarga de crear nuevos canales gRPC en cada clic del usuario |
+| **Tolerancia a Fallos** | Captura estructurada de `grpc.RpcError` | La interfaz gráfica no colapsa si el backend no responde, guiando al usuario |
+| **Portabilidad** | Rutas dinámicas con `pathlib.Path` | Ejecución válida desde cualquier directorio de trabajo o sistema operativo |
 
-```text
-archivo.proto
+---
+
+## 🧪 Pruebas Automatizadas y Calidad de Código
+
+El proyecto cuenta con una suite de **17 pruebas unitarias e integrales** que validan:
+* Carga de datos, tipado categórico y agregaciones estadísticas.
+* Enrutamiento y serialización de endpoints gRPC con simulación de fallos.
+* Integridad de contratos Protocol Buffers (`SerializeToString` / `ParseFromString`).
+* Tolerancia ante la desconexión del servidor gRPC.
+
+### Ejecutar Pruebas Localmente
+```bash
+# Ejecutar todas las pruebas con reporte de cobertura
+pytest --cov=. --cov-report=term-missing
+
+# Ejecutar analizador de código estático (Linter)
+ruff check .
 ```
 
-como contrato estricto de serialización entre servicios.
-
-Beneficios:
-
-- Comunicación tipada
-- Baja latencia
-- Payloads compactos
-- Alta interoperabilidad
-- Serialización binaria eficiente
+### Integración Continua (GitHub Actions)
+Cada `push` o `pull request` en la rama `main` ejecuta automáticamente las pruebas y el linter en **Python 3.10, 3.11 y 3.12** sobre máquinas virtuales Ubuntu.
 
 ---
 
-# 🛡️ Ingeniería Aplicada
+## 👨‍💻 Autores
 
-## ✅ Tolerancia a Fallos de Red
+Este proyecto fue desarrollado de forma colaborativa por:
 
-El ecosistema implementa mecanismos avanzados de resiliencia:
+* **David Alejandro Cruz Palacios** — [@aledash3](https://github.com/aledash3)
+* **Emily Mabel Ortega Constante** — [@emybel2005](https://github.com/emybel2005)
+* **Carlos José Pilatuña Roldan**
 
-- Verificación activa de conexión Pyro4
-- Manejo de excepciones remotas
-- Captura segura de:
-  ```python
-  grpc.RpcError
-  ```
-- Aislamiento entre capas
-- Recuperación elegante ante caídas de nodos
-
-El dashboard nunca colapsa abruptamente ante errores backend.
+Carrera de Ingeniería en Ciencias de la Computación  
+**Universidad Politécnica Salesiana (UPS)**  
+Quito, Ecuador
 
 ---
 
-## ✅ Clean Code y Desacoplamiento
+## 📜 Licencia
 
-La arquitectura sigue principios sólidos de ingeniería:
-
-- Separación estricta de responsabilidades
-- Microservicios desacoplados
-- Contratos definidos mediante `.proto`
-- Código modular y mantenible
-- Comunicación transparente entre procesos
-
----
-
-## ✅ Optimización Extrema de RAM
-
-El proyecto aplica técnicas reales de optimización para datasets masivos:
-
-| Técnica | Beneficio |
-|---|---|
-| Selección parcial de columnas | Reduce lectura innecesaria |
-| Conversión a `category` | Disminuye memoria en strings repetitivos |
-| Extracción exclusiva del año | Reduce objetos datetime pesados |
-| Procesamiento delegado | Evita saturar la capa visual |
-| Serialización eficiente | Reduce overhead de red |
-
----
-
-# 📈 Tecnologías Utilizadas
-
-- Python 3
-- Pandas
-- Pyro4
-- gRPC
-- Protocol Buffers
-- Streamlit
-- OpenPyXL
-
----
-
-# 🎯 Objetivo Técnico del Proyecto
-
-Este proyecto fue diseñado para demostrar competencias avanzadas en:
-
-- Arquitecturas distribuidas
-- Procesamiento masivo de datos
-- Sistemas tolerantes a fallos
-- Comunicación RPC
-- Optimización de memoria
-- Dashboards analíticos
-- Ingeniería backend escalable
-
----
-
-# 👨‍💻 Autores
-
-- David Alejandro Cruz Palacios
-- Emily Mabel Ortega Constante
-- Carlos José Pilatuña Roldan
-
-Estudiantes de Ingenieria en Ciencias de la Computación - Universidad Politécnica Salesiana (UPS)
-
-Proyecto desarrollado para analítica de datos en seguridad ciudadana y arquitecturas distribuidas orientadas a servicios.
-
-Diseñado con enfoque profesional para portafolios de ingeniería de software, backend distribuido y ciencia de datos aplicada.
+Este proyecto está bajo la [Licencia MIT](LICENSE). Consulta el archivo `LICENSE` para más información.
