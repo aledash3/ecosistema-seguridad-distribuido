@@ -1,25 +1,45 @@
-import grpc
+from pathlib import Path
 import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'nodo_logico_grpc')))
 
-import archivo_pb2
-import archivo_pb2_grpc
+import grpc
+import pytest
+
+# Soporte de importación independiente
+ROOT_DIR = Path(__file__).resolve().parent.parent
+for p in [str(ROOT_DIR), str(ROOT_DIR / "proto"), str(ROOT_DIR / "nodo_logico_grpc")]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    import archivo_pb2
+    import archivo_pb2_grpc
+except ImportError:
+    from proto import archivo_pb2, archivo_pb2_grpc
+
 
 def test_conexion_grpc_caida():
-    """Prueba que el sistema maneje bien el error si el Nodo gRPC no está."""
-    print("Iniciando prueba de tolerancia a fallos...")
-    canal = grpc.insecure_channel('localhost:50051')
+    """Prueba de tolerancia a fallos cuando el servidor gRPC no está disponible."""
+    # Puerto arbitrario donde no hay ningún servicio corriendo
+    canal = grpc.insecure_channel('localhost:54999')
     cliente = archivo_pb2_grpc.MotorAnaliticaStub(canal)
-    
+
     filtro = archivo_pb2.FiltroAnios(anio_inicio=2020, anio_fin=2020)
-    
-    try:
-        respuesta = cliente.ObtenerAgregacionInicial(filtro)
-        print("Éxito: Servicios conectados correctamente.")
-    except grpc.RpcError as e:
-        print("Tolerancia a fallos correcta. Excepción capturada.")
-        print(f"Estado: {e.code()} | Detalle: {e.details()}")
+
+    # Con timeout corto para verificar captura de RpcError
+    with pytest.raises(grpc.RpcError) as exc_info:
+        cliente.ObtenerAgregacionInicial(filtro, timeout=1.5)
+
+    error = exc_info.value
+    assert error.code() in [
+        grpc.StatusCode.UNAVAILABLE,
+        grpc.StatusCode.DEADLINE_EXCEEDED,
+    ]
+
 
 if __name__ == "__main__":
-    test_conexion_grpc_caida()
+    print("Iniciando prueba de tolerancia a fallos...")
+    try:
+        test_conexion_grpc_caida()
+        print("Tolerancia a fallos validada exitosamente.")
+    except Exception as e:
+        print(f"Resultado: {e}")
