@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecosistema-seguridad-distribuido"
+version = "1.0.0"
+description = "Ecosistema distribuido de tres capas para analítica de seguridad ciudadana usando Pyro4, gRPC y Streamlit"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "David Alejandro Cruz Palacios", email = "cruzd2249@gmail.com" },
+    { name = "Emily Mabel Ortega Constante", email = "emybel2005@gmail.com" },
+    { name = "Carlos José Pilatuña Roldan" }
+]
+license = { text = "MIT" }
+dependencies = [
+    "Pyro4>=4.82",
+    "grpcio>=1.60.0",
+    "grpcio-tools>=1.60.0",
+    "protobuf>=4.25.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "streamlit>=1.30.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "proto", "nodo_logico_grpc", "nodo_maestro_pyro", "dashboard_streamlit"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning"
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["*pb2*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = ["E501", "B008", "E402"]
