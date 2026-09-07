@@ -1,11 +1,30 @@
-# Ignorar bases de datos y archivos pesados
+# Ignorar bases de datos y archivos pesados de producción
 data/*.xlsx
-data/*.csv
+data/dataset_procesado.csv
+
+# Preservar dataset de muestra ligero para pruebas y clonación
+!data/sample_dataset.csv
 
 # Ignorar cachés de Python
 __pycache__/
 *.py[cod]
 *$py.class
-# Ignorar configuraciones locales de SO
+*.so
+
+# Pruebas y cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+ENV/
+
+# Ignorar configuraciones locales de IDE y SO
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
