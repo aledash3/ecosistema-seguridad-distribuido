@@ -247,8 +247,8 @@ Cada `push` o `pull request` en la rama `main` ejecuta automáticamente las prue
 Este proyecto fue desarrollado de forma colaborativa por:
 
 * **David Alejandro Cruz Palacios** — [@aledash3](https://github.com/aledash3)
-* **Emily Mabel Ortega Constante** — [@emybel2005](https://github.com/emybel2005)
-* **Carlos José Pilatuña Roldan**
+* **Emily Mabel Ortega Constante** — [@BOOTEABLE](https://github.com/BOOTEABLE)
+* **Carlos José Pilatuña Roldan** — [@Katsuro03](https://github.com/Katsuro03)
 
 Carrera de Ingeniería en Ciencias de la Computación  
 **Universidad Politécnica Salesiana (UPS)**  
@@ -261,6 +261,6 @@ Quito, Ecuador
 Este proyecto fue desarrollado con fines exclusivamente académicos y educativos en la **Universidad Politécnica Salesiana (UPS)**.
 
 Todos los derechos pertenecen a sus respectivos autores:
-* **David Alejandro Cruz Palacios**
-* **Emily Mabel Ortega Constante**
-* **Carlos José Pilatuña Roldan**
+* **David Alejandro Cruz Palacios** ([@aledash3](https://github.com/aledash3))
+* **Emily Mabel Ortega Constante** ([@BOOTEABLE](https://github.com/BOOTEABLE))
+* **Carlos José Pilatuña Roldan** ([@Katsuro03](https://github.com/Katsuro03))
