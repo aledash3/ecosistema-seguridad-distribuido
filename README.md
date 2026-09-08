@@ -2,7 +2,7 @@
 
 **Arquitectura distribuida de 3 capas para el procesamiento, análisis estadístico y visualización reactiva de homicidios intencionales en Ecuador (2014-2025) utilizando Pyro4, gRPC y Streamlit.**
 
-[![CI](https://github.com/aledash3/ecosistema-seguridad-distribuido/actions/workflows/ci.yml/badge.svg)](https://github.com/aledash3/ecosistema-seguridad-distribuido/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/aledash3/ecosistema-seguridad-distribuido/ci.yml?branch=main&style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/aledash3/ecosistema-seguridad-distribuido/actions)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Pyro4](https://img.shields.io/badge/Pyro4-Distributed%20Objects-orange?style=for-the-badge)](https://pyro4.readthedocs.io/)
 [![gRPC](https://img.shields.io/badge/gRPC-Protocol%20Buffers-00bfa5?style=for-the-badge&logo=grpc&logoColor=white)](https://grpc.io/)
@@ -94,7 +94,6 @@ ecosistema-seguridad-distribuido/
 │   ├── test_maestro.py            # Pruebas de carga, filtrado y tipos en el nodo maestro
 │   └── test_proto.py              # Validación de serialización de mensajes protobuf
 ├── .gitignore
-├── LICENSE                        # Licencia MIT
 ├── pyproject.toml                 # Metadatos del proyecto y configuración de herramientas
 ├── README.md                      # Documentación principal del sistema
 └── requirements.txt               # Dependencias de producción y desarrollo
@@ -228,6 +227,33 @@ El proyecto cuenta con una suite de **17 pruebas unitarias e integrales** que va
 * Integridad de contratos Protocol Buffers (`SerializeToString` / `ParseFromString`).
 * Tolerancia ante la desconexión del servidor gRPC.
 
+```text
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-9.1.1, pluggy-1.6.0
+rootdir: ecosistema-seguridad-distribuido
+collected 17 items
+
+tests/test_ecosistema.py::test_conexion_grpc_caida PASSED                [  5%]
+tests/test_grpc_servicer.py::test_grpc_obtener_frecuencia_provincia PASSED [ 11%]
+tests/test_grpc_servicer.py::test_grpc_obtener_frecuencia_arma PASSED    [ 17%]
+tests/test_grpc_servicer.py::test_grpc_obtener_agregacion_inicial PASSED [ 23%]
+tests/test_grpc_servicer.py::test_grpc_obtener_resumen_tabla PASSED      [ 29%]
+tests/test_grpc_servicer.py::test_grpc_rango_sin_datos PASSED            [ 35%]
+tests/test_grpc_servicer.py::test_grpc_pyro_desconectado PASSED          [ 41%]
+tests/test_maestro.py::test_maestro_carga_datos PASSED                   [ 47%]
+tests/test_maestro.py::test_maestro_tipado_categorico PASSED             [ 52%]
+tests/test_maestro.py::test_maestro_filtrar_por_anios_rango_valido PASSED [ 58%]
+tests/test_maestro.py::test_maestro_filtrar_por_anios_sin_resultados PASSED [ 64%]
+tests/test_maestro.py::test_maestro_agregacion_inicial PASSED            [ 70%]
+tests/test_maestro.py::test_maestro_agregacion_inicial_rango_vacio PASSED [ 76%]
+tests/test_proto.py::test_filtro_anios_proto PASSED                      [ 82%]
+tests/test_proto.py::test_item_frecuencia_proto PASSED                   [ 88%]
+tests/test_proto.py::test_respuesta_frecuencias_proto PASSED             [ 94%]
+tests/test_proto.py::test_respuesta_tabla_proto PASSED                   [100%]
+
+============================= 17 passed in 2.48s ==============================
+```
+
 ### Ejecutar Pruebas Localmente
 ```bash
 # Ejecutar todas las pruebas con reporte de cobertura
@@ -258,9 +284,6 @@ Quito, Ecuador
 
 ## 📜 Licencia
 
-Este proyecto fue desarrollado con fines exclusivamente académicos y educativos en la **Universidad Politécnica Salesiana (UPS)**.
+Este proyecto fue desarrollado con fines estrictamente académicos y de investigación formativa para la **Universidad Politécnica Salesiana (UPS)**.
 
-Todos los derechos pertenecen a sus respectivos autores:
-* **David Alejandro Cruz Palacios** ([@aledash3](https://github.com/aledash3))
-* **Emily Mabel Ortega Constante** ([@BOOTEABLE](https://github.com/BOOTEABLE))
-* **Carlos José Pilatuña Roldan** ([@Katsuro03](https://github.com/Katsuro03))
+Todos los derechos reservados conforme a las normativas de desarrollo académico e institucional. Prohibido su uso comercial no autorizado.
