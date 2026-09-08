@@ -277,6 +277,7 @@ Este proyecto fue desarrollado de forma colaborativa por:
 * **Carlos José Pilatuña Roldan** — [@Katsuro03](https://github.com/Katsuro03)
 
 Carrera de Ingeniería en Ciencias de la Computación  
+Asignatura: **Sistemas Distribuidos** (6to Semestre)  
 **Universidad Politécnica Salesiana (UPS)**  
 Quito, Ecuador
 
